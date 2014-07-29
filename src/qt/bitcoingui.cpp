@@ -952,6 +952,8 @@ void BitcoinGUI::updateStakingIcon()
     }
     else
     {
+        uint64_t nNetworkWeight = GetPoSKernelPS();
+        
         labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         if (pwalletMain && pwalletMain->IsLocked())
             labelStakingIcon->setToolTip(tr("Not staking because wallet is locked<br>Network weight is %1").arg(nNetworkWeight));
