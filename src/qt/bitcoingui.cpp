@@ -573,7 +573,7 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     }
 
     // Set icon state: spinning if catching up, tick otherwise
-    if(secs < 90*60 && count >= nTotalBlocks)
+    if(secs < 90*60*24 && count >= nTotalBlocks)
     {
         tooltip = tr("Up to date") + QString(".<br>") + tooltip;
         labelBlocksIcon->setPixmap(QIcon(":/icons/synced").pixmap(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE));
@@ -952,15 +952,17 @@ void BitcoinGUI::updateStakingIcon()
     }
     else
     {
+        uint64_t nNetworkWeight = GetPoSKernelPS();
+        
         labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
         if (pwalletMain && pwalletMain->IsLocked())
-            labelStakingIcon->setToolTip(tr("Not staking because wallet is locked"));
+            labelStakingIcon->setToolTip(tr("Not staking because wallet is locked<br>Network weight is %1").arg(nNetworkWeight));
         else if (vNodes.empty())
-            labelStakingIcon->setToolTip(tr("Not staking because wallet is offline"));
+            labelStakingIcon->setToolTip(tr("Not staking because wallet is offline<br>Network weight is %1").arg(nNetworkWeight));
         else if (IsInitialBlockDownload())
-            labelStakingIcon->setToolTip(tr("Not staking because wallet is syncing"));
+            labelStakingIcon->setToolTip(tr("Not staking because wallet is syncing<br>Network weight is %1").arg(nNetworkWeight));
         else if (!nWeight)
-            labelStakingIcon->setToolTip(tr("Not staking because you don't have mature coins"));
+            labelStakingIcon->setToolTip(tr("Not staking because you don't have mature coins<br>Network weight is %1").arg(nNetworkWeight));
         else
             labelStakingIcon->setToolTip(tr("Not staking"));
     }
